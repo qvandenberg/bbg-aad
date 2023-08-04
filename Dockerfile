@@ -33,5 +33,3 @@ COPY . .
 EXPOSE ${PORT:-7071}
 
 CMD gunicorn -w 2 -b 0.0.0.0:7071 --chdir src main:server
-
-# docker build -t bloomberg .; docker run  -p 7071:7071 bloomberg
