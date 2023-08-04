@@ -8,18 +8,17 @@ The calculation for order prices is done in a directed acyclic graph. Each of th
 
 In short, a single graph traversal gives both the final output + sensitivity. 
 
-# Get started
-Create a virtual environment with python version 3.8 or above and install the dependencies. 
+# Run instructions
+Ensure Docker and Docker Compose are installed on the system.
 
-Pip: run `pip install -r requirements.txt`
-Conda (create environment directly from the requirements file): run `conda create --name <env> --file conda-requirements.txt` 
+Create the container with:
+`docker-compose up`
 
-## Run example script with main application
-navigate to the `src` folder. From there, run `python main.py` to run the example in the pdf assignment. It can be tweaked beforehand to run with different values.
+This creates the image and starts the container.
+
+Open an internet browser and navigate to `localhost:7071` or http://127.0.0.1:7071/ 
 
 ## Run front end in Dash app
-Start the dash app by running `python dash_app.py` from the `src` folder. Open a browser and navigate to 'http://127.0.0.1:10453/' to operate the application in the UI (or localhost:10453). 
-
 There is little input validation in the front end, but it should be self-explanatory.
 
 Data fields that can be changed:
@@ -29,5 +28,7 @@ Data fields that can be changed:
 - Zinc prices
 - Order parameters
 - Sensitivity analysis shock ladders
+
+Press the `Calculate prices` button to compute the total price and sensitivity calculation. The sensitivity calculation uses algorithmic differentiation under the hood in the `ComputationalNode` and `DirectedAcyclicGraph` classes.
 
 In the `/docs` folder there is a sample of what the front end should look like.
