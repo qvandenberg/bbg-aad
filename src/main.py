@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
+import flask
 
 # Internal dependencies
 from static.StaticData import StaticData
@@ -11,7 +12,8 @@ from static.Constants import METALS, QUALITY
 from external_input.MarketData import MarketData
 from pricing.OrderBook import OrderBook
 
-app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY])
+server = flask.Flask(__name__)
+app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], server=server)
 
 sidebar = html.Div(
     [
@@ -523,4 +525,4 @@ for first_slider, second_slider in zip(
 
 
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True, port=10453)
+    app.run_server(debug=True)

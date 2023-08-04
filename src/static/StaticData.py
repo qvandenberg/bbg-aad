@@ -1,11 +1,9 @@
-from typing import Any, Tuple, List
+# External dependencies
+from typing import Tuple, List
 from functools import reduce
-from iteration_utilities import all_monotone
 import numpy as np
 import warnings
 import bisect
-from itertools import accumulate
-from enum import Enum, EnumMeta
 
 from static.Constants import METALS
 
@@ -43,9 +41,9 @@ class StaticData(object):
         def function_wrapper(self, labour_factors: List[Tuple[float, float]]):
             lengths, factors = zip(*labour_factors)
 
-            if not all_monotone(lengths, strict=True):
+            if not is_sorted(lengths):
                 raise ValueError("Lengths must be supplied in ascending order")
-            if not all_monotone(factors, strict=True):
+            if not is_sorted(factors):
                 warnings.warn(
                     "Labour factors are expected to be monotonically increasing"
                 )

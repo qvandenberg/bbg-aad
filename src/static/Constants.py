@@ -34,7 +34,7 @@ class QUALITY(Enum):
     @classmethod
     def _missing_(cls, value: object) -> Any:
         return cls.DEFAULT
-    
+
     @classmethod
     def get_all_qualities(cls) -> List:
-        return ["AA", "A", "B", "C" ]
+        return ["AA", "A", "B", "C"]

@@ -1,10 +1,7 @@
 import pytest
-import rootpath
 
-rootpath.append()
-
-from src.pricing.DirectedAcyclicGraph import DirectedAcyclicGraph
-from src.static.Constants import METALS
+from pricing.DirectedAcyclicGraph import DirectedAcyclicGraph
+from static.Constants import METALS
 import numpy as np
 
 

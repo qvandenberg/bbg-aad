@@ -12,7 +12,6 @@ class ComputationalNode:
         self._gradient_value = None
         self._value = value
         self._children_nodes = []
-        # print("Created node with value: ", value)
 
     def __mul__(self, other) -> Any:
         z = ComputationalNode(self._value * other._value)

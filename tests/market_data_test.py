@@ -1,9 +1,7 @@
 import pytest
-import rootpath
 
-rootpath.append()
-from src.external_input.MarketData import MarketData
-from src.static.Constants import METALS, QUALITY
+from external_input.MarketData import MarketData
+from static.Constants import METALS, QUALITY
 import numpy as np
 
 

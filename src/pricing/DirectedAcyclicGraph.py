@@ -27,7 +27,6 @@ class DirectedAcyclicGraph:
         self._zinc_price = ComputationalNode(zinc_price)
         self._labour_factor = ComputationalNode(labour_factor)
         self._percentage_sensitivities = defaultdict(float)
-        
 
     def build_graph(self) -> ComputationalNode:
         return (
@@ -63,7 +62,6 @@ class DirectedAcyclicGraph:
         self._percentage_sensitivities[METALS.ZINC] = (
             self._zinc_price.get_gradient() * self._zinc_price.get_value()
         )
-
 
     def get_price_sensitivity(self, metal: METALS) -> float:
         if metal not in self._percentage_sensitivities:

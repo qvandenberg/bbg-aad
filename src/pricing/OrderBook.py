@@ -2,12 +2,12 @@
 import warnings
 import itertools
 import numpy as np
-from static.Constants import METALS
 
 # Internal dependencies
 from external_input.ClientOrder import ClientOrder
 from static.StaticData import StaticData
 from external_input.MarketData import MarketData
+from static.Constants import METALS
 
 
 class OrderBook(object):
