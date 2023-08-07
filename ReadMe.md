@@ -11,24 +11,21 @@ In short, a single graph traversal gives both the final output + sensitivity.
 # Run instructions
 Ensure Docker and Docker Compose are installed on the system.
 
-Create the container with:
+Create and run the Docker container with:
 `docker-compose up`
 
-This creates the image and starts the container.
+Open an internet browser and navigate to http://127.0.0.1:7071/ (this is the local host)
 
-Open an internet browser and navigate to `localhost:7071` or http://127.0.0.1:7071/ 
+## Enter parameters in the user interface
+Before the price calculation, we need some parameters. Below data field can be changed if desired:
 
-## Run front end in Dash app
-There is little input validation in the front end, but it should be self-explanatory.
-
-Data fields that can be changed:
 - Copper fraction slider
 - Labour factor table
 - Copper price
 - Zinc prices
 - Order parameters
-- Sensitivity analysis shock ladders
+- Sensitivity analysis price shock range
 
-Press the `Calculate prices` button to compute the total price and sensitivity calculation. The sensitivity calculation uses algorithmic differentiation under the hood in the `ComputationalNode` and `DirectedAcyclicGraph` classes.
+Press the `Calculate prices` button to compute the total price and sensitivity calculation. The sensitivity calculation uses algorithmic differentiation under the hood in the `pricing/ComputationalNode` and `pricing/DirectedAcyclicGraph` classes.
 
 In the `/docs` folder there is a sample of what the front end should look like.
