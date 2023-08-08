@@ -1,8 +1,39 @@
+# External dependencies
 import pytest
+import numpy as np
 
+# Internal dependencies
 from pricing.DirectedAcyclicGraph import DirectedAcyclicGraph
 from static.Constants import METALS
-import numpy as np
+
+
+@pytest.mark.parametrize(
+    "weight,copper_fraction,copper_price, zinc_price, labour_factor",
+    [
+        (1.0, 1.0, 20.0, 5.0, 1.0),
+        (1.0, 0.5, 20.0, 5.0, 1.0),
+        (1.0, 0.25, 20.0, 5.0, 1.0),
+        (1.0, 0.0, 15.0, 5.0, 1.0),
+        (2.0, 0.8, 10.54, 5.0, 1.2),
+        (50.0, 0.7, 11.78, 5.0, 1.4),
+        (100.0, 0.3, 12.025, 5.0, 1.1),
+        (950.0, 0.66, 20.4, 5.0, 1.9),
+    ],
+)
+def test_price_calculation(
+    weight, copper_fraction, copper_price, zinc_price, labour_factor
+):
+    graph = DirectedAcyclicGraph(
+        weight, copper_fraction, copper_price, zinc_price, labour_factor
+    )
+
+    alloy_price = graph.get_price()
+    verified_price = (
+        weight
+        * labour_factor
+        * (copper_fraction * copper_price + (1.0 - copper_fraction) * zinc_price)
+    )
+    assert np.isclose(alloy_price, verified_price)
 
 
 @pytest.mark.parametrize(

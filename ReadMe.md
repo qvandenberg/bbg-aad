@@ -29,3 +29,8 @@ Before the price calculation, we need some parameters. Below data field can be c
 Press the `Calculate prices` button to compute the total price and sensitivity calculation. The sensitivity calculation uses algorithmic differentiation under the hood in the `pricing/ComputationalNode` and `pricing/DirectedAcyclicGraph` classes.
 
 In the `/docs` folder there is a sample of what the front end should look like.
+
+# Run unit tests
+Ensure dependencies are installed and written to the poetry lock file by running `poetry install; poetry lock`
+
+Run unit tests from the root folder through `poetry run pytest`
