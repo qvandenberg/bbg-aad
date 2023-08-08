@@ -33,6 +33,16 @@ class ComputationalNode:
 
         return z
 
+    def __sub__(self, other) -> Any:
+        z = ComputationalNode(self._value - other._value)
+        # dz = dx - dy
+        # weight = dz/ dself = 1
+        self._children_nodes.append((1.0, z))
+        # weight = dz/ dother = -1
+        other._children_nodes.append((-1.0, z))
+
+        return z
+
     def get_gradient(self) -> float:
         if self._gradient_value is None:
             self._gradient_value = sum(

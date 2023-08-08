@@ -22,14 +22,15 @@ class DirectedAcyclicGraph:
     ):
         self._total_weight = ComputationalNode(total_weight)
         self._copper_split = ComputationalNode(copper_fraction)
-        self._zinc_split = ComputationalNode(1.0 - copper_fraction)
+        self._zinc_split = ComputationalNode(1.0) - self._copper_split
         self._copper_price = ComputationalNode(copper_price)
         self._zinc_price = ComputationalNode(zinc_price)
         self._labour_factor = ComputationalNode(labour_factor)
-        self._percentage_sensitivities = defaultdict(float)
+        self._graph = None
+        self._build_graph()
 
-    def build_graph(self) -> ComputationalNode:
-        return (
+    def _build_graph(self) -> ComputationalNode:
+        self._graph = (
             (
                 self._copper_price * self._copper_split
                 + self._zinc_price * self._zinc_split
@@ -37,33 +38,15 @@ class DirectedAcyclicGraph:
             * self._total_weight
             * self._labour_factor
         )
-
-    def reset_gradients(self) -> None:
-        for attr, value in self.__dict__.items():
-            if isinstance(value, ComputationalNode):
-                value.set_gradient(None)
-
-    def set_gradients_to_zero(self) -> None:
-        for attr, value in self.__dict__.items():
-            if isinstance(value, ComputationalNode):
-                value.set_gradient(0.0)
+        self._graph.set_gradient(1.0)
 
     def get_price(self) -> float:
-        graph = self.build_graph()
-        return graph.get_value()
-
-    def compute_gradients(self):
-        self._percentage_sensitivities.clear()
-        graph = self.build_graph()
-        graph.set_gradient(1.0)
-        self._percentage_sensitivities[METALS.COPPER] = (
-            self._copper_price.get_gradient() * self._copper_price.get_value()
-        )
-        self._percentage_sensitivities[METALS.ZINC] = (
-            self._zinc_price.get_gradient() * self._zinc_price.get_value()
-        )
+        return self._graph.get_value()
 
     def get_price_sensitivity(self, metal: METALS) -> float:
-        if metal not in self._percentage_sensitivities:
-            self.compute_gradients()
-        return self._percentage_sensitivities.get(metal, 0.0)
+        if metal == METALS.COPPER:
+            return self._copper_price.get_gradient() * self._copper_price.get_value()
+        elif metal == METALS.ZINC:
+            return self._zinc_price.get_gradient() * self._zinc_price.get_value()
+        else:
+            raise NotImplementedError("Unknown metal requested.")

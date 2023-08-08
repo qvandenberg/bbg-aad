@@ -144,8 +144,8 @@ sidebar = html.Div(
     ]
 )
 
-# Relative price shock maximum
-MAX_PRICE_SHOCK = 0.25
+# Relative price shock percentage
+MAX_PRICE_SHOCK = 25.0
 
 
 content = html.Div(
@@ -156,7 +156,7 @@ content = html.Div(
                     [
                         html.H2("Brass rod pricing"),
                         html.P(
-                            "Brass is an alloy of copper and zinc, in proportions which can be varied to achieve different properties. Clients place orders specifying the overall weight, the length of the rods and the quality of the zinc to be used."
+                            "Brass is an alloy of copper and zinc, in proportions which can be varied to achieve different properties. Clients place orders specifying the overall weight, the length of the rods and the quality of the zinc to be used. Zinc qualities are classed as AA, A, B and C"
                         ),
                         html.P(
                             "All these parameters affect the price of the order. The base price of the rods is computed as the price of the raw materials multiplied by a labour factor, which increases with the rod length, as making longer rods is harder and more time consuming."
@@ -214,10 +214,16 @@ content = html.Div(
                             },
                             data=[
                                 {
-                                    "order-client": "Quincy",
+                                    "order-client": "User 1",
                                     "order-weight": 2340,
                                     "rod-length": 108,
-                                    "input-zinc-quality": "A",
+                                    "input-zinc-quality": "AA",
+                                },
+                                {
+                                    "order-client": "User 2",
+                                    "order-weight": 1820,
+                                    "rod-length": 144,
+                                    "input-zinc-quality": "B",
                                 },
                                 {},
                             ],
@@ -279,8 +285,8 @@ content = html.Div(
                         html.Br(),
                         dcc.RangeSlider(
                             id="copper-shock-slider",
-                            min=-25,
-                            max=25,
+                            min=-MAX_PRICE_SHOCK,
+                            max=MAX_PRICE_SHOCK,
                             step=0.01,
                             value=[-10, 10],
                             allowCross=False,
@@ -300,8 +306,8 @@ content = html.Div(
                             [
                                 dcc.RangeSlider(
                                     id="zinc-shock-slider",
-                                    min=-25,
-                                    max=25,
+                                    min=-MAX_PRICE_SHOCK,
+                                    max=MAX_PRICE_SHOCK,
                                     step=0.01,
                                     value=[-10, 10],
                                     allowCross=False,
@@ -424,6 +430,7 @@ def compute_client_prices(
         Input("run-price-calculation-button", "n_clicks"),
         Input("zinc-shock-slider", "value"),
         Input("copper-shock-slider", "value"),
+        # Input("copper-fraction-slider", "value"),
     ],
     [
         State("order-parameters-table", "data"),
@@ -469,7 +476,6 @@ def compute_price_shock(
             colorbar=dict(
                 title="Price change (USD)",
             ),
-            # layout=dict(title={"text": "test"}),
         ),
     )
 
@@ -525,4 +531,4 @@ for first_slider, second_slider in zip(
 
 
 if __name__ == "__main__":
-    app.run_server(debug=False)
+    app.run_server(debug=True, port=7072)
