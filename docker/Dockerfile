@@ -32,4 +32,4 @@ COPY . .
 # Run server
 EXPOSE ${PORT:-7071}
 
-CMD gunicorn -w 2 -b 0.0.0.0:7071 --chdir src main:server
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:7071", "--chdir", "src", "main:server"]

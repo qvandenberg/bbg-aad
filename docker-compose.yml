@@ -1,6 +1,9 @@
 version: "2.1"
 services:
   web:
-    build: .
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+    working_dir: /src
     ports:
       - "7071:7071"
