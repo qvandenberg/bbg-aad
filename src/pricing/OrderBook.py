@@ -75,9 +75,10 @@ class OrderBook(object):
             price_change += np.multiply(sensitivity_vector, shock_pairs)
 
         # Convert price differences to percentages because Dash doesn't support percentage formatting on RangeSlider
-        diff_cu_price, diff_zn_price = [pair[0] * 100.0 for pair in shock_pairs], [
+        diff_zn_price, diff_cu_price = [pair[0] * 100.0 for pair in shock_pairs], [
             pair[1] * 100.0 for pair in shock_pairs
         ]
+        # Sum up price difference in the zinc and copper
         total_price_change = np.add.reduce(price_change, 1)
 
         return diff_zn_price, diff_cu_price, total_price_change

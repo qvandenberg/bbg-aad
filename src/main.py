@@ -1,5 +1,6 @@
 # External dependencies
 from dash import Dash, html, dcc, dash_table, Output, Input, State, callback, html, dcc
+from dash.dash_table import FormatTemplate
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import plotly.express as px
@@ -14,6 +15,7 @@ from pricing.OrderBook import OrderBook
 
 server = flask.Flask(__name__)
 app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], server=server)
+app.title = "DAC pricer"
 
 sidebar = html.Div(
     [
@@ -93,22 +95,24 @@ sidebar = html.Div(
                         html.Button("+", id="labour-factor-rows-button", n_clicks=0),
                         html.Hr(),
                         html.B(
-                            "Market prices (USD / kg)",
+                            "Market prices ($ / kg)",
                             className="font-weight-bold",
                         ),
-                        html.Hr(),
-                        html.P(
-                            "Copper price:",
-                        ),
-                        html.Div(
-                            children=dcc.Input(
-                                id="copper-price",
-                                type="number",
-                                value=8.22,
-                                placeholder=8.22,
-                            ),
-                        ),
                         html.Br(),
+                        html.Br(),
+                        dbc.InputGroup(
+                            [
+                                dbc.InputGroupText("Copper price $"),
+                                dbc.Input(
+                                    id="copper-price",
+                                    placeholder=8.22,
+                                    type="number",
+                                    min=0.01,
+                                    value=8.22,
+                                ),
+                            ],
+                            className="mb-2",
+                        ),
                         html.Br(),
                         dash_table.DataTable(
                             id="zinc-price-table",
@@ -123,7 +127,7 @@ sidebar = html.Div(
                                     "name": "Price",
                                     "id": "zinc-prices",
                                     "type": "numeric",
-                                    "format": {"specifier": ".2f"},
+                                    "format": FormatTemplate.money(2),
                                     "editable": True,
                                 },
                             ],
@@ -139,7 +143,7 @@ sidebar = html.Div(
                     ]
                 )
             ],
-            style={"height": "110vh", "margin": "8px"},
+            style={"height": "110vh", "margin": "8px", "overflow": "scroll"},
         ),
     ]
 )
@@ -162,7 +166,7 @@ content = html.Div(
                             "All these parameters affect the price of the order. The base price of the rods is computed as the price of the raw materials multiplied by a labour factor, which increases with the rod length, as making longer rods is harder and more time consuming."
                         ),
                         html.P(
-                            "The rods are sold at market prices that fluctuate throughout the day and can be set in the table. For any client order, this code can calculate the total order price as well as the sensitivity to price movements in copper and zinc through algorithmic differentiation."
+                            "The rods are sold at market prices that fluctuate throughout the day and can be set in the table. For any client order, this code can calculate the total order price as well as the sensitivity to price movements in copper and zinc. Under the hood, it creates a directed acyclic graph (DAC) that implements algorithmic differentiation for the sensitivity calculations."
                         ),
                         html.Hr(),
                     ]
@@ -186,7 +190,7 @@ content = html.Div(
                                     "name": "Weight (kg)",
                                     "id": "order-weight",
                                     "type": "numeric",
-                                    "format": {"specifier": ".1f"},
+                                    "format": {"specifier": ",.1f"},
                                     "editable": True,
                                 },
                                 {
@@ -224,6 +228,12 @@ content = html.Div(
                                     "order-weight": 1820,
                                     "rod-length": 144,
                                     "input-zinc-quality": "B",
+                                },
+                                {
+                                    "order-client": "User 3",
+                                    "order-weight": 27040,
+                                    "rod-length": 93,
+                                    "input-zinc-quality": "C",
                                 },
                                 {},
                             ],
@@ -263,10 +273,10 @@ content = html.Div(
                                     "type": "text",
                                 },
                                 {
-                                    "name": "Price (USD)",
+                                    "name": "Price",
                                     "id": "output-price",
                                     "type": "numeric",
-                                    "format": {"specifier": ".2f"},
+                                    "format": FormatTemplate.money(2),
                                 },
                             ],
                             data=[],
@@ -326,13 +336,17 @@ content = html.Div(
                 ),
             ],
         ),
-    ]
+    ],
+    style={"overflow": "scroll"},
 )
 
 app.layout = dbc.Container(
     [
         dbc.Row(
-            [dbc.Col(sidebar, width=3, className="bg-light"), dbc.Col(content, width=9)]
+            [
+                dbc.Col(sidebar, width=4, className="bg-light"),
+                dbc.Col(content, width=8),
+            ]
         ),
     ],
     fluid=True,
@@ -430,7 +444,6 @@ def compute_client_prices(
         Input("run-price-calculation-button", "n_clicks"),
         Input("zinc-shock-slider", "value"),
         Input("copper-shock-slider", "value"),
-        # Input("copper-fraction-slider", "value"),
     ],
     [
         State("order-parameters-table", "data"),
@@ -474,7 +487,7 @@ def compute_price_shock(
             y=zinc_shock_ladder,
             z=price_change,
             colorbar=dict(
-                title="Price change (USD)",
+                title="Price change ($)",
             ),
         ),
     )
@@ -487,7 +500,7 @@ def compute_price_shock(
     )
 
     fig.update_layout(
-        title_text="Client order price sensitivity (USD)",
+        title_text="Client order price sensitivity ($)",
         title_font={"size": 20},
         title_x=0.45,
     )

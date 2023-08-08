@@ -34,3 +34,7 @@ In the `/docs` folder there is a sample of what the front end should look like.
 Ensure dependencies are installed and written to the poetry lock file by running `poetry install; poetry lock`
 
 Run unit tests from the root folder through `poetry run pytest`
+
+## Acknowledgement
+Favicon created by Surang:
+<a href="https://www.flaticon.com/free-icons/metal" title="metal icons">Metal icons created by surang - Flaticon</a>
