@@ -1,6 +1,6 @@
 # User manual
 
-Dash & CLI app to compute order prices for brass rods (a copper : zinc alloy). 
+Dash app to compute order prices for brass rods (a copper : zinc alloy). 
 
 Manufacturing costs depend on the weight, rod length, the ratio of copper : zinc and their respective prices.
 
