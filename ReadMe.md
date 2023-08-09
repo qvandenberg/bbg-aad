@@ -14,7 +14,8 @@ Ensure Docker and Docker Compose are installed on the system.
 Create and run the Docker container with:
 `docker-compose up`
 
-Open an internet browser and navigate to http://127.0.0.1:7071/ (this is the local host)
+Open an internet browser and navigate to http://127.0.0.1:7071/ (this is the local host) to see the UI.
+<img src="/docs/ui-example.png" alt="UI sample">
 
 ## Enter parameters in the user interface
 Before the price calculation, we need some parameters. Below data field can be changed if desired:

@@ -55,95 +55,121 @@ sidebar = html.Div(
                             marks=None,
                         ),
                         html.Hr(),
-                        html.B(
-                            "Labour factors",
-                            className="font-weight-bold",
-                        ),
-                        dash_table.DataTable(
-                            id="labour-factor-table",
-                            columns=[
-                                {
-                                    "name": "Rod length (cm)",
-                                    "id": "rod-length",
-                                    "type": "numeric",
-                                    "format": {"specifier": ".1f"},
-                                    "on_change": {
-                                        "action": "coerce",
-                                        "failure": "default",
-                                    },
-                                },
-                                {
-                                    "name": "Labour factor",
-                                    "id": "labour-factor",
-                                    "type": "numeric",
-                                    "format": {"specifier": ".2f"},
-                                    "on_change": {"failure": "default"},
-                                    "validation": {"default": ""},
-                                },
+                        html.Div(
+                            children=[
+                                html.B(
+                                    "Labour factors",
+                                    className="font-weight-bold",
+                                ),
+                                dash_table.DataTable(
+                                    id="labour-factor-table",
+                                    columns=[
+                                        {
+                                            "name": "Rod length (cm)",
+                                            "id": "rod-length",
+                                            "type": "numeric",
+                                            "format": {"specifier": ".1f"},
+                                            "on_change": {
+                                                "action": "coerce",
+                                                "failure": "default",
+                                            },
+                                        },
+                                        {
+                                            "name": "Labour factor",
+                                            "id": "labour-factor",
+                                            "type": "numeric",
+                                            "format": {"specifier": ".2f"},
+                                            "on_change": {"failure": "default"},
+                                            "validation": {"default": ""},
+                                        },
+                                    ],
+                                    data=[
+                                        {"rod-length": x, "labour-factor": y}
+                                        for x, y in zip(
+                                            [0, 75.0, 100, 125], [1.05, 1.1, 1.15, 1.25]
+                                        )
+                                    ],
+                                    editable=True,
+                                    row_deletable=True,
+                                    fill_width=False,
+                                ),
+                                # Add row button
+                                html.Button(
+                                    "+", id="labour-factor-rows-button", n_clicks=0
+                                ),
                             ],
-                            data=[
-                                {"rod-length": x, "labour-factor": y}
-                                for x, y in zip(
-                                    [0, 75.0, 100, 125], [1.05, 1.1, 1.15, 1.25]
-                                )
-                            ],
-                            editable=True,
-                            row_deletable=True,
-                            fill_width=False,
+                            className="mb-2 mt-4 p-4 price-input-block",
                         ),
-                        # Add row button
-                        html.Button("+", id="labour-factor-rows-button", n_clicks=0),
                         html.Hr(),
                         html.B(
                             "Market prices ($ / kg)",
                             className="font-weight-bold",
                         ),
-                        html.Br(),
-                        html.Br(),
-                        dbc.InputGroup(
-                            [
-                                dbc.InputGroupText("Copper price $"),
-                                dbc.Input(
-                                    id="copper-price",
-                                    placeholder=8.22,
-                                    type="number",
-                                    min=0.01,
-                                    value=8.22,
-                                ),
-                            ],
-                            className="mb-2",
+                        # Market prices for copper and zinc
+                        html.Div(
+                            className="price-input-block",
+                            children=dbc.InputGroup(
+                                [
+                                    dbc.InputGroupText(
+                                        "Copper", className="input-group-text"
+                                    ),
+                                    dbc.Input(
+                                        className="input-group-numeric",
+                                        id="copper-price",
+                                        placeholder=8.22,
+                                        type="number",
+                                        min=0.01,
+                                        value=8.22,
+                                    ),
+                                ],
+                                className="mb-2 mt-4 p-4 price-input-block",
+                            ),
                         ),
-                        html.Br(),
-                        dash_table.DataTable(
-                            id="zinc-price-table",
-                            columns=[
-                                {
-                                    "name": "Zinc quality",
-                                    "id": "zinc-quality",
-                                    "type": "text",
-                                    "editable": False,
-                                },
-                                {
-                                    "name": "Price",
-                                    "id": "zinc-prices",
-                                    "type": "numeric",
-                                    "format": FormatTemplate.money(2),
-                                    "editable": True,
-                                },
-                            ],
-                            data=[
-                                {"zinc-quality": x, "zinc-prices": p}
-                                for x, p in zip(
+                        html.Div(
+                            id="zinc-prices-input",
+                            children=[
+                                #     dbc.InputGroup(
+                                #         [
+                                #             dbc.InputGroupText(
+                                #                 "Zinc quality", className="input-group-text"
+                                #             ),
+                                #             dbc.InputGroupText(
+                                #                 "Price ($)",
+                                #                 className="input-group-text",
+                                #                 style={"width": "250px"},
+                                #             ),
+                                #         ],
+                                #         className="mb-2",
+                                #     ),
+                                # ]+
+                                #  [
+                                dbc.InputGroup(
+                                    [
+                                        dbc.InputGroupText(
+                                            "Zinc " + "(" + quality.upper() + ")",
+                                            className="input-group-text",
+                                        ),
+                                        dbc.Input(
+                                            className="input-group-numeric",
+                                            id="zinc-price-" + quality.lower(),
+                                            placeholder=price,
+                                            type="number",
+                                            min=0.01,
+                                            step=0.01,
+                                            value=price,
+                                        ),
+                                    ],
+                                )
+                                for quality, price in zip(
                                     QUALITY.get_all_qualities(), [7.5, 4.9, 3.5, 3.05]
                                 )
                             ],
-                            row_deletable=False,
-                            fill_width=False,
+                            className="mb-2 mt-4 p-4 price-input-block",
                         ),
                     ]
                 )
             ],
-            style={"height": "110vh", "margin": "8px", "overflow": "scroll"},
+            style={"height": "110vh", "margin": "2px", "overflow": "scroll"},
         ),
     ]
 )
@@ -160,7 +186,7 @@ content = html.Div(
                     [
                         html.H2("Brass rod pricing"),
                         html.P(
-                            "Brass is an alloy of copper and zinc, in proportions which can be varied to achieve different properties. Clients place orders specifying the overall weight, the length of the rods and the quality of the zinc to be used. Zinc qualities are classed as AA, A, B and C"
+                            "Brass is an alloy of copper and zinc, in proportions which can be varied to achieve different properties. Clients place orders specifying the overall weight, the length of the rods and the quality of the zinc to be used. Zinc qualities are classed as AA, A, B and C."
                         ),
                         html.P(
                             "All these parameters affect the price of the order. The base price of the rods is computed as the price of the raw materials multiplied by a labour factor, which increases with the rod length, as making longer rods is harder and more time consuming."
@@ -383,9 +409,16 @@ def extract_market_and_static_data(
 
     market_data.set_price(copper_price, METALS.COPPER, QUALITY.DEFAULT)
 
-    for row in zinc_prices:
-        quality = QUALITY(row["zinc-quality"])
-        price = row["zinc-prices"]
+    retrieved_zinc_prices = [
+        (
+            row["props"]["children"][1]["props"]["id"],
+            row["props"]["children"][1]["props"]["value"],
+        )
+        for row in zinc_prices
+        if row["props"]["children"][1]["type"] == "Input"
+    ]
+    for id, price in retrieved_zinc_prices:
+        quality = QUALITY(id.split("-")[-1].upper())
         market_data.set_price(price, METALS.ZINC, quality)
 
     return static_data, market_data
@@ -399,15 +432,10 @@ def extract_market_and_static_data(
     State("copper-fraction-slider", "value"),
     State("labour-factor-table", "data"),
     State("copper-price", "value"),
-    State("zinc-price-table", "data"),
+    State("zinc-prices-input", "children"),
 )
 def compute_client_prices(
-    n_clicks,
-    order_data,
-    copper_fraction,
-    labour_factors,
-    copper_price,
-    zinc_prices,
+    n_clicks, order_data, copper_fraction, labour_factors, copper_price, zinc_prices
 ):
     if n_clicks == 0:
         return [
@@ -450,7 +478,7 @@ def compute_client_prices(
         State("copper-fraction-slider", "value"),
         State("labour-factor-table", "data"),
         State("copper-price", "value"),
-        State("zinc-price-table", "data"),
+        State("zinc-prices-input", "children"),
     ],
 )
 def compute_price_shock(
