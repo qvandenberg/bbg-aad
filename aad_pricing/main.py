@@ -19,10 +19,23 @@ app.title = "DAC pricer"
 
 sidebar = html.Div(
     [
-        dbc.Row(
-            [html.H5("Settings", style={"margin-top": "12px", "margin-left": "24px"})],
-            style={"height": "5vh"},
-            className="bg-primary text-white font-italic",
+        html.Div(
+            children=[
+                dbc.Row(
+                    [
+                        html.H5(
+                            "Settings",
+                            style={
+                                "margin-top": "12px",
+                                "margin-left": "24px",
+                            },
+                        ),
+                    ],
+                    style={"height": "8vh"},
+                    className="bg-primary text-white font-italic",
+                ),
+                html.Br(),
+            ]
         ),
         dbc.Row(
             [
@@ -116,7 +129,7 @@ sidebar = html.Div(
                                     dbc.Input(
                                         className="input-group-numeric",
                                         id="copper-price",
-                                        placeholder=8.22,
+                                        placeholder="enter price...",
                                         type="number",
                                         min=0.01,
                                         value=8.22,
@@ -128,21 +141,6 @@ sidebar = html.Div(
                         html.Div(
                             id="zinc-prices-input",
                             children=[
-                                #     dbc.InputGroup(
-                                #         [
-                                #             dbc.InputGroupText(
-                                #                 "Zinc quality", className="input-group-text"
-                                #             ),
-                                #             dbc.InputGroupText(
-                                #                 "Price ($)",
-                                #                 className="input-group-text",
-                                #                 style={"width": "250px"},
-                                #             ),
-                                #         ],
-                                #         className="mb-2",
-                                #     ),
-                                # ]+
-                                #  [
                                 dbc.InputGroup(
                                     [
                                         dbc.InputGroupText(
@@ -152,7 +150,7 @@ sidebar = html.Div(
                                         dbc.Input(
                                             className="input-group-numeric",
                                             id="zinc-price-" + quality.lower(),
-                                            placeholder=price,
+                                            placeholder="enter price...",
                                             type="number",
                                             min=0.01,
                                             step=0.01,
@@ -572,4 +570,5 @@ for first_slider, second_slider in zip(
 
 
 if __name__ == "__main__":
+    # app.run_server(debug=True, port=7072)
     app.run_server(debug=False)
