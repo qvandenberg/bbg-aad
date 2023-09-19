@@ -1,9 +1,22 @@
 version: "2.1"
 services:
-  web:
+  aad-pricing:
     build:
       context: ./
       dockerfile: ./docker/Dockerfile
-    working_dir: /src
+      target: prod
+    image: pricing
     ports:
-      - "7071:7071"
+      - "7071:8050"
+
+  aad-pricing-tests:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile
+      target: tests
+    image: test
+    volumes:
+      - testResults:/var/lib/docker/volumes/aad-pricing_testResults/_data
+
+volumes:
+  testResults:

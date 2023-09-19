@@ -1,35 +1,61 @@
+# ARG WORKDIR="/aad_pricing"
+
 ################
-# Stage: Build #
+# Stage: Base #
 ################
+FROM python:3.8-slim AS python-base
 
-FROM python:3.8-slim AS build
+ENV POETRY_VERSION=1.4.0 \
+    POETRY_PATH=/opt/poetry \
+    VENV_PATH=/.venv \
+    WHEEL_PATH=dist/
+ENV PATH="${WHEEL_PATH}:/root/.poetry/bin:/root/.local/bin:$POETRY_PATH/bin:$VENV_PATH/bin:$PATH"
+RUN pip install --upgrade pip
 
-ENV POETRY_VERSION=1.4.0
+################
+# Stage: Builder #
+################
+FROM python-base as builder
 
-WORKDIR /src
+RUN pip install "poetry==$POETRY_VERSION" \
+    && poetry config virtualenvs.in-project true
 
-# Export poetry dependencies to file
-RUN pip install "poetry==$POETRY_VERSION"
-COPY poetry.lock pyproject.toml ./
-RUN poetry export --without-hashes --format requirements.txt --output /src/requirements.txt
+COPY . .
+RUN  poetry install --no-interaction --no-cache --compile --only main \
+    && poetry build --format wheel
+
+#####################
+# Stage: Test #
+# Provide the container to run tests
+#####################
+
+FROM python-base as tests
+
+ENV TEST_RESULT_FOLDER=testResults 
+
+RUN pip install "poetry==$POETRY_VERSION" \
+    && poetry config virtualenvs.in-project true \
+    && mkdir TEST_RESULT_FOLDER
+
+COPY pyproject.toml .
+
+RUN  poetry install --no-interaction --no-cache 
+
+WORKDIR /testRunner
+# \
+# && poetry run pytest tests --report-log=TEST_RESULT_FOLDER/results.log
 
 #####################
 # Stage: Production #
 #####################
-FROM python:3.8-slim AS prod
+FROM python-base AS prod
 
-ENV PYTHONPATH=/src
+COPY --from=builder ${WHEEL_PATH} ${WHEEL_PATH}
+COPY --from=builder /applications/ /applications/
 
-WORKDIR /src
+RUN pip install dist/*
 
-# Copy requirements from build stage, and install them
-COPY --from=build /src/requirements.txt . 
-RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE ${PORT:-8050}
+ENTRYPOINT [ "gunicorn"]
 
-COPY . .
-
-# Run server
-EXPOSE ${PORT:-7071}
-
-CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:7071", "--chdir", "src", "main:server"]
+CMD ["--workers=2", "--threads=1", "-b 0.0.0.0:8050", "--chdir", "applications", "server:server"]
