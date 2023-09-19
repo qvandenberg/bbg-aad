@@ -2,8 +2,8 @@
 from collections import defaultdict
 
 # Internal dependencies
-from pricing.ComputationalNode import ComputationalNode
-from static.Constants import METALS
+from aad_pricing.pricing.ComputationalNode import ComputationalNode
+from aad_pricing.static.Constants import METALS
 
 
 class DirectedAcyclicGraph:

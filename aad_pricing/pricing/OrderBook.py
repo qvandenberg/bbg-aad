@@ -4,10 +4,10 @@ import itertools
 import numpy as np
 
 # Internal dependencies
-from external_input.ClientOrder import ClientOrder
-from static.StaticData import StaticData
-from external_input.MarketData import MarketData
-from static.Constants import METALS
+from aad_pricing.external_input.ClientOrder import ClientOrder
+from aad_pricing.static.StaticData import StaticData
+from aad_pricing.external_input.MarketData import MarketData
+from aad_pricing.static.Constants import METALS
 
 
 class OrderBook(object):

@@ -1,6 +1,9 @@
+# External dependencies
 from typing import Any
 import numbers
-from static.Constants import METALS, QUALITY
+
+# Internal dependencies
+from aad_pricing.static.Constants import METALS, QUALITY
 
 
 class MarketData(object):

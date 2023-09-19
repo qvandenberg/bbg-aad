@@ -1,9 +1,8 @@
 # Internal dependencies
-from static.StaticData import StaticData
-from static.Constants import METALS, QUALITY
-from external_input.MarketData import MarketData
-from pricing.DirectedAcyclicGraph import DirectedAcyclicGraph
-
+from aad_pricing.static.StaticData import StaticData
+from aad_pricing.static.Constants import METALS, QUALITY
+from aad_pricing.external_input.MarketData import MarketData
+from aad_pricing.pricing.DirectedAcyclicGraph import DirectedAcyclicGraph
 
 class ClientOrder(object):
     def __init__(

@@ -5,7 +5,8 @@ import numpy as np
 import warnings
 import bisect
 
-from static.Constants import METALS
+# Internal dependencies
+from aad_pricing.static.Constants import METALS
 
 
 def is_sorted(iterable):

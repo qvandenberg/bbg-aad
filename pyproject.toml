@@ -1,9 +1,13 @@
 [tool.poetry]
-name = "brass-pricing"
+name = "aad-pricing"
 version = "0.1.0"
 description = "Pricing tool to compute brass rod prices from raw materials, and some order parameters. This code computes the total order price and price sensitivity to raw material market changes."
 authors = ["Quincy van den Berg <32027910+qvandenberg@users.noreply.github.com>"]
-readme = "README.md"
+readme = "ReadMe.md"
+include=['aad_pricing']
+
+[tool.poetry.scripts]
+my-cli = 'aad_pricing.index:run'
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -11,20 +15,21 @@ dash = "2.4.1"
 numpy = "^1.22.4"
 plotly = "^5.15.0"
 dash-bootstrap-components = "^1.1.0"
-typing-extensions = "^3.10.0.0"
 gunicorn = "^20.1.0"
 itsdangerous = "1.1.0"
 markupsafe = "1.1.1"
+typing-extensions = "^3.10.0.0"
 werkzeug = "2.0.3"
 pandas = "1.5.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.7.0"
 pytest = "^7.4.0"
+pytest-reportlog = "^0.3.0"
 isort = "^5.12.0"
 
 [tool.pytest.ini_options]
-pythonpath = "src"
+pythonpath = "aad_pricing"
 
 [build-system]
 requires = ["poetry-core"]

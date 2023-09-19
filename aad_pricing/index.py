@@ -8,14 +8,14 @@ import numpy as np
 import flask
 
 # Internal dependencies
-from static.StaticData import StaticData
-from static.Constants import METALS, QUALITY
-from external_input.MarketData import MarketData
-from pricing.OrderBook import OrderBook
+from aad_pricing.static.StaticData import StaticData
+from aad_pricing.static.Constants import METALS, QUALITY
+from aad_pricing.external_input.MarketData import MarketData
+from aad_pricing.pricing.OrderBook import OrderBook
 
 server = flask.Flask(__name__)
-app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], server=server)
-app.title = "DAC pricer"
+dash_app = Dash(__name__, external_stylesheets=[dbc.themes.FLATLY], server=server)
+dash_app.title = "DAC pricer"
 
 sidebar = html.Div(
     [
@@ -364,7 +364,7 @@ content = html.Div(
     style={"overflow": "scroll"},
 )
 
-app.layout = dbc.Container(
+dash_app.layout = dbc.Container(
     [
         dbc.Row(
             [
@@ -567,8 +567,3 @@ for first_slider, second_slider in zip(
     )
     def normalise_slider(fraction):
         return 1.0 - fraction
-
-
-if __name__ == "__main__":
-    # app.run_server(debug=True, port=7072)
-    app.run_server(debug=False)

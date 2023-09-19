@@ -11,11 +11,22 @@ In short, a single graph traversal yields both the final price output + sensitiv
 # Run instructions
 Ensure Docker and Docker Compose are installed on the system.
 
-Create and run the Docker container from the root folder of this project through:
-`docker-compose up`
+Create and run the Docker container with:
+`docker-compose up aad-pricing --build`
 
 Open an internet browser and navigate to http://127.0.0.1:7071/ to see the UI on the local host.
 <img src="/docs/ui-example.png" alt="UI sample">
+
+Run unit tests with:
+`docker-compose up -d aad-pricing-tests`
+`docker run -it --rm -v ${PWD}:/testRunner -v ${PWD}/reports/allure:/testRunner/allure docker-test:latest poetry run pytest --junitxml=reports/allure/test-results.xml`
+Test results are exported to:
+`/reports/allure/`
+
+## Manual steps to build with poetry
+From `root`:
+
+rm -r dist; pip uninstall aad_pricing; poetry build --format wheel; pip install dist/*; python applications/server.py
 
 ## Enter parameters in the user interface
 Before the price calculation, we need some parameters. Below data field can be changed if desired:
