@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "Pricing tool to compute brass rod prices from raw materials, and some order parameters. This code computes the total order price and price sensitivity to raw material market changes."
 authors = ["Quincy van den Berg <32027910+qvandenberg@users.noreply.github.com>"]
 readme = "ReadMe.md"
-include=['aad_pricing']
+packages = [
+    { include = "aad_pricing", from = "src" },
+]
 
 [tool.poetry.scripts]
 my-cli = 'aad_pricing.index:run'
@@ -29,7 +31,7 @@ pytest-reportlog = "^0.3.0"
 isort = "^5.12.0"
 
 [tool.pytest.ini_options]
-pythonpath = "aad_pricing"
+pythonpath = ["src"]
 
 [build-system]
 requires = ["poetry-core"]

@@ -8,8 +8,10 @@ FROM python:3.8-slim AS python-base
 ENV POETRY_VERSION=1.4.0 \
     POETRY_PATH=/opt/poetry \
     VENV_PATH=/.venv \
-    WHEEL_PATH=dist/
+    WHEEL_PATH=dist/ \
+    PYTHONPATH="${PYTHONPATH}:/src"
 ENV PATH="${WHEEL_PATH}:/root/.poetry/bin:/root/.local/bin:$POETRY_PATH/bin:$VENV_PATH/bin:$PATH"
+
 RUN pip install --upgrade pip
 
 ################
@@ -53,7 +55,7 @@ FROM python-base AS prod
 COPY --from=builder ${WHEEL_PATH} ${WHEEL_PATH}
 COPY --from=builder /applications/ /applications/
 
-RUN pip install dist/*
+RUN pip3 install dist/*
 
 EXPOSE ${PORT:-8050}
 ENTRYPOINT [ "gunicorn"]

@@ -25,3 +25,5 @@ venv
 
 .vscode
 .idea
+
+dist/*
