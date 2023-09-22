@@ -1,7 +1,7 @@
 import pytest
 
-from external_input.MarketData import MarketData
-from static.Constants import METALS, QUALITY
+from aad_pricing.external_input.MarketData import MarketData
+from aad_pricing.static.Constants import METALS, QUALITY
 import numpy as np
 
 

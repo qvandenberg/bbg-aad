@@ -33,15 +33,12 @@ RUN  poetry install --no-interaction --no-cache --compile --only main \
 
 FROM python-base as tests
 
-ENV TEST_RESULT_FOLDER=testResults 
-
-RUN pip install "poetry==$POETRY_VERSION" \
-    && poetry config virtualenvs.in-project true \
-    && mkdir TEST_RESULT_FOLDER
+RUN pip install "poetry==${POETRY_VERSION}" \
+    && poetry config virtualenvs.in-project true 
 
 COPY pyproject.toml .
 
-RUN  poetry install --no-interaction --no-cache 
+RUN  poetry install --no-interaction --no-cache --no-root
 
 WORKDIR /testRunner
 # \

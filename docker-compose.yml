@@ -15,8 +15,14 @@ services:
       dockerfile: ./docker/Dockerfile
       target: tests
     image: test
+    command: poetry run pytest --junitxml=test-reports/test-results.xml
     volumes:
-      - testResults:/var/lib/docker/volumes/aad-pricing_testResults/_data
+      - '${PWD}:/testRunner'
+      - '${PWD}/test-reports:/testRunner/allure'
+      - '${PWD}/tests:/testRunner/tests'
 
 volumes:
-  testResults:
+  test-reports:
+  tests:
+
+

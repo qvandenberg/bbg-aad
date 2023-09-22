@@ -3,8 +3,8 @@ import pytest
 import numpy as np
 
 # Internal dependencies
-from pricing.DirectedAcyclicGraph import DirectedAcyclicGraph
-from static.Constants import METALS
+from aad_pricing.pricing.DirectedAcyclicGraph import DirectedAcyclicGraph
+from aad_pricing.static.Constants import METALS
 
 
 @pytest.mark.parametrize(
