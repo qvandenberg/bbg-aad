@@ -1,6 +1,3 @@
-# External dependencies
-from collections import defaultdict
-
 # Internal dependencies
 from aad_pricing.pricing.ComputationalNode import ComputationalNode
 from aad_pricing.static.Constants import METALS

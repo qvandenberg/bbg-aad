@@ -3,9 +3,9 @@ from typing import Any
 
 class ComputationalNode:
     """
-    Class Node represents each step of the pricing calculation as a piece of single assignment code.
-    It holds both the value and Jacobian (gradients)calculated directly from the pricing calculation,
-    so we can provide a sensitivity analysis without computing finite differences etc.
+    Class ComputationalNode represents each step of the pricing calculation as a piece of single assignment code.
+    It holds both the value and gradients (Jacobian) calculated directly from the pricing calculation in a single pass,
+    so we can provide a sensitivity analysis without computing finite differences.
     """
 
     def __init__(self, value):

@@ -6,6 +6,19 @@ from aad_pricing.pricing.DirectedAcyclicGraph import DirectedAcyclicGraph
 
 
 class ClientOrder(object):
+    """
+    Class ClientOrder is an object containing a single entry for a client order containing:
+     * Client name (string)
+     * Weight in kg (float)
+     * Rod length in cm (float)
+     * Zinc quality (enumeration of AA, A, B, C)
+
+     Together with static data and market data, these properties are fed into the directed acyclic graph
+     to compute the order price and sensitivities.
+
+     Static data and market data are tied to each object instance, allowing different market prices per client order.
+    """
+
     def __init__(
         self,
         client_name: str,

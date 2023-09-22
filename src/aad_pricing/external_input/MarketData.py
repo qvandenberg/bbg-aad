@@ -1,5 +1,4 @@
 # External dependencies
-from typing import Any
 import numbers
 
 # Internal dependencies
@@ -7,6 +6,11 @@ from aad_pricing.static.Constants import METALS, QUALITY
 
 
 class MarketData(object):
+    """
+    Class MarketData contains snapshots of the copper and zinc prices in USD/kg.
+    Zinc pricing is denominated into categories separated by metal quality.
+    """
+
     def __init__(self) -> None:
         # Market prices: {METALS (enum): {QUALITY (enum): price (float)} }
         self._prices = {}

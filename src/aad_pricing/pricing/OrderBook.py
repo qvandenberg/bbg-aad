@@ -11,6 +11,13 @@ from aad_pricing.static.Constants import METALS
 
 
 class OrderBook(object):
+    """
+    Class OrderBook is a container class for client orders.
+
+    Client order input data is collected here. This class provides the price calculations
+    and price sensitivities with respect to raw material price shocks.
+    """
+
     def __init__(self, static_data: StaticData) -> None:
         self._static_data = static_data
         self._client_orders = {}

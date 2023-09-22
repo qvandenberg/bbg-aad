@@ -16,6 +16,11 @@ def is_sorted(iterable):
 
 
 class StaticData(object):
+    """
+    Class StaticData contains information about copper : zinc mass ratios in brass,
+    as well as the labour factors associated with different rod lengths.
+    """
+
     # Alloy composition by weight fractions
     _alloy_composition = {}
     # Labour factor to account for production effort of rod length. Data structure: list( (max_length, labour_factor) ... )
