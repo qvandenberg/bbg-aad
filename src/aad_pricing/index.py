@@ -318,7 +318,7 @@ content = html.Div(
                         html.Br(),
                         html.Br(),
                         dcc.RangeSlider(
-                            id="copper-shock-slider",
+                            id="zinc-shock-slider",
                             min=-MAX_PRICE_SHOCK,
                             max=MAX_PRICE_SHOCK,
                             step=0.01,
@@ -339,7 +339,7 @@ content = html.Div(
                         html.Div(
                             [
                                 dcc.RangeSlider(
-                                    id="zinc-shock-slider",
+                                    id="copper-shock-slider",
                                     min=-MAX_PRICE_SHOCK,
                                     max=MAX_PRICE_SHOCK,
                                     step=0.01,
