@@ -1,4 +1,3 @@
-# ARG WORKDIR="/aad_pricing"
 
 ################
 # Stage: Base #
@@ -27,6 +26,21 @@ RUN  poetry install --no-interaction --no-cache --compile --only main \
     && poetry build --format wheel
 
 #####################
+# Stage: Production #
+#####################
+FROM python-base AS prod
+
+COPY --from=builder ${WHEEL_PATH} ${WHEEL_PATH}
+COPY --from=builder /applications/ /applications/
+
+RUN pip3 install dist/*
+
+EXPOSE ${PORT:-8050}
+ENTRYPOINT [ "gunicorn"]
+
+CMD ["--workers=2", "--threads=1", "-b 0.0.0.0:8050", "--chdir", "applications", "server:server"]
+
+#####################
 # Stage: Test #
 # Provide the container to run tests
 #####################
@@ -41,20 +55,3 @@ COPY pyproject.toml .
 RUN  poetry install --no-interaction --no-cache --no-root
 
 WORKDIR /testRunner
-# \
-# && poetry run pytest tests --report-log=TEST_RESULT_FOLDER/results.log
-
-#####################
-# Stage: Production #
-#####################
-FROM python-base AS prod
-
-COPY --from=builder ${WHEEL_PATH} ${WHEEL_PATH}
-COPY --from=builder /applications/ /applications/
-
-RUN pip3 install dist/*
-
-EXPOSE ${PORT:-8050}
-ENTRYPOINT [ "gunicorn"]
-
-CMD ["--workers=2", "--threads=1", "-b 0.0.0.0:8050", "--chdir", "applications", "server:server"]

@@ -9,24 +9,27 @@ The calculation for order prices is performed in a directed acyclic graph. Each 
 In short, a single graph traversal yields both the final price output + sensitivity. 
 
 # Run instructions
-Ensure Docker and Docker Compose are installed on the system.
+Ensure Docker and Docker Compose are installed on the system. Installing Docker Desktop is recommended to achieve this.
 
-Create and run the Docker container with:
+Create and run the production Docker container with:
 `docker-compose up aad-pricing --build`
 
 Open an internet browser and navigate to http://127.0.0.1:7071/ to see the UI on the local host.
 <img src="/docs/ui-example.png" alt="UI sample">
 
-Run unit tests with:
-`docker-compose up -d aad-pricing-tests`
-`docker run -it --rm -v ${PWD}:/testRunner -v ${PWD}/reports/allure:/testRunner/allure docker-test:latest poetry run pytest --junitxml=reports/allure/test-results.xml`
-Test results are exported to:
-`/reports/allure/`
+# Run unit tests in local directory
+Run the tests through:
+`docker-compose up -d aad-pricing-test-local`
 
-## Manual steps to build with poetry
-From `root`:
+This action creates a Docker container only for running tests. The image is created from prod + dev dependencies and only changes whenever the dependencies are updated. The test code is mounted into the container, and test results are exported through volume mounts. See the `docker-compose.yml` for details.
 
-rm -r dist; pip uninstall aad_pricing; poetry build --format wheel; pip install dist/*; python applications/server.py
+Test results are exported to an Allure xml file on host:
+`/test-reports/test-results.xml`
+
+## Manual steps to build and run with poetry (dev only)
+From `/`:
+
+`poetry build --format wheel; pip install dist/*; poetry run python applications/server.py`
 
 ## Enter parameters in the user interface
 Before the price calculation, we need some parameters. Below data field can be changed if desired:

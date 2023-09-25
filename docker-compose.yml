@@ -9,7 +9,7 @@ services:
     ports:
       - "7071:8050"
 
-  aad-pricing-tests:
+  aad-pricing-test-local:
     build:
       context: ./
       dockerfile: ./docker/Dockerfile
