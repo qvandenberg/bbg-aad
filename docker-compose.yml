@@ -5,6 +5,7 @@ services:
       context: ./
       dockerfile: ./docker/Dockerfile
       target: prod
+    container_name: aad-pricing
     image: pricing
     ports:
       - "7071:8050"
@@ -14,6 +15,7 @@ services:
       context: ./
       dockerfile: ./docker/Dockerfile
       target: tests
+    container_name: aad-pricing-tests
     image: test
     command: poetry run pytest --junitxml=test-reports/test-results.xml
     volumes:
