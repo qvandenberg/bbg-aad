@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage("Test tooling") {
+            steps {
+                sh '''
+                docker --version
+                docker info
+                docker compose --version
+                '''
+            }
+        }
+        stage('Test') {
+            steps {
+                sh '''
+                docker compose up aad-pricing-test-local
+                '''
+            }
+        }
+    }
+    post {
+        always {
+          junit(testResults: 'test-reports/*.xml', allowEmptyResults : true)
+        }
+      }
+}
